@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Logic & Expression I | Interactive Mock Exam</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Inter', "Yu Gothic", Meiryo, sans-serif;
+  }
+  /* Custom subtle animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade {
+    animation: fadeIn 0.25s ease-out forwards;
+  }
+  @media print {
+    header, .no-print, button { display: none !important; }
+    body { background: white !important; }
+    .shadow-sm, .shadow-md, .shadow-lg { box-shadow: none !important; }
+  }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+<!-- Header -->
+<header class="bg-gradient-to-r from-[#17334e] to-[#28658d] text-white shadow-md">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-7 sm:py-9">
+    <div class="text-xs font-bold tracking-widest uppercase text-sky-200 mb-1">English Logic &amp; Expression I</div>
+    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">Interactive Mock Examination</h1>
+    <p class="text-sky-100 mt-1 text-sm sm:text-base font-medium">論理表現Ⅰ 模擬試験｜Lessons 5 &amp; 6</p>
+    <p class="text-sky-200/90 text-xs sm:text-sm mt-1">Past Perfect · Future Perfect · Auxiliary Verbs / 過去完了形・未来完了形・助動詞</p>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+  <!-- Home View: Exam Selection -->
+  <div id="homeView" class="animate-fade">
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-[#183653]">Choose an Examination / 模擬試験を選択</h2>
+          <p class="text-slate-500 text-sm mt-1">Complete each subsection individually with instant feedback and a second-chance retry. / 各セクションごとに解答を確認し、間違えた問題は1回だけやり直すことができます。</p>
+        </div>
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-sky-50 text-[#183653] border border-sky-200 self-start sm:self-auto">
+          8 Subsections · 100 Points
+        </span>
+      </div>
+
+      <div id="examCards" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <!-- Cards injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Exam View -->
+  <div id="examView" class="hidden animate-fade space-y-6">
+    
+    <!-- Top Sticky/Summary Bar -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm no-print">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="examTag" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-100 text-[#183653]"></span>
+            <span id="sectionsCompletedBadge" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">0 / 8 Sections Assessed</span>
+          </div>
+          <h2 id="examTitle" class="text-xl sm:text-2xl font-bold text-[#183653] mt-1.5"></h2>
+          <div class="mt-2 flex items-center gap-2">
+            <label for="studentName" class="text-sm font-medium text-slate-600">Name / 氏名：</label>
+            <input id="studentName" type="text" placeholder="Enter your name" class="px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#28658d] w-48 sm:w-60">
+          </div>
+        </div>
+        <div class="flex items-center gap-2 self-start sm:self-center">
+          <button onclick="requestGoHome()" class="px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+            ← Back / 戻る
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="mt-5">
+        <div class="flex justify-between text-xs font-medium text-slate-500 mb-1.5">
+          <span id="progressText">0 / 8 subsections finalized</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+          <div id="progressBar" class="h-full bg-amber-400 transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subsections Container -->
+    <div id="sectionsContainer" class="space-y-6">
+      <!-- Subsections injected via JS -->
+    </div>
+
+    <!-- Final Score Panel -->
+    <div id="finalScorePanel" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm no-print">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-lg sm:text-xl font-bold text-[#183653]">Final Exam Score / 総合スコア確認</h3>
+          <p id="finalStatusHint" class="text-sm text-slate-500 mt-1">Complete and finalize all 8 subsections above to unlock your final exam score.</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <button id="checkFinalScoreBtn" onclick="calculateFinalScore()" disabled class="px-6 py-3 rounded-xl font-bold text-sm text-white bg-[#183653] hover:bg-[#28658d] disabled:opacity-40 disabled:cursor-not-allowed shadow-sm transition">
+            Check Total Score / 総合得点を確認する
+          </button>
+          <button onclick="requestResetExam()" class="px-4 py-3 rounded-xl font-semibold text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+            Reset Exam / 最初からやり直す
+          </button>
+        </div>
+      </div>
+
+      <!-- Final Results Breakdown (Hidden until unlocked & clicked) -->
+      <div id="finalResultsBox" class="hidden mt-6 pt-6 border-t border-slate-200 animate-fade">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Custom Modal Dialog (Replaces alert / confirm) -->
+<div id="modalOverlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 animate-fade">
+    <h3 id="modalTitle" class="text-lg font-bold text-[#183653]">Notice</h3>
+    <p id="modalMessage" class="text-sm text-slate-600 mt-2 leading-relaxed"></p>
+    <div id="modalActions" class="mt-6 flex justify-end gap-3">
+      <!-- Buttons injected dynamically -->
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center text-slate-400 text-xs py-6 px-4 border-t border-slate-200/70 bg-white mt-auto">
+  Practice material based on Lesson 5 and Lesson 6 teaching materials. / Lesson 5・Lesson 6の教材に基づく練習問題
+</footer>
+
+<script>
+/**
+ * Exam Dataset (Preserved strictly from original content)
+ */
+const exams = [
+  {
+    "id": "A",
+    "title": "Mock Examination 1",
+    "subtitle": "Lesson 5: Tenses / Lesson 6: Auxiliary Verbs",
+    "sections": [
+      {
+        "title": "1. Vocabulary and Modal Verbs",
+        "instruction": "Choose the appropriate words from the word bank and complete each sentence. Use each word only once. (1 point × 10 = 10 points)",
+        "type": "fill",
+        "ptsPerQ": 1,
+        "bank": ["can", "might", "can't", "had", "will", "borrow", "lived", "should", "have", "can"],
+        "qs": [
+          ["彼女はフランス語を話すことができます。", "Mina ({{0}}) speak French.", ["can"]],
+          ["彼は今夜来るかもしれません。", "He ({{0}}) come tonight.", ["might"]],
+          ["彼女がそんなことを言ったはずがありません。", "She ({{0}}) have said such a thing.", ["can't"]],
+          ["私たちが駅に着く前に、電車は出発していました。", "The train ({{0}}) left before we reached the station.", ["had"]],
+          ["明日の正午までには、彼らは到着しているでしょう。", "They ({{0}}) have arrived by noon tomorrow.", ["will"]],
+          ["この図書館から本を借りることができます。", "You can ({{0}}) books from this library.", ["borrow"]],
+          ["彼は大阪に来る前、京都に住んでいました。", "He had ({{0}}) in Kyoto before he came to Osaka.", ["lived"]],
+          ["あなたはもっと水を飲むべきです。", "You ({{0}}) drink more water.", ["should"]],
+          ["彼女はその知らせを聞いたことがあるかもしれません。", "She may ({{0}}) heard the news.", ["have"]],
+          ["事故はいつでも起こることがあります。", "Accidents ({{0}}) happen at any time.", ["can"]]
+        ],
+        "answers": [["can"], ["might"], ["can't"], ["had"], ["will"], ["borrow"], ["lived"], ["should"], ["have"], ["can"]]
+      },
+      {
+        "title": "2. Past Perfect / Past Perfect Continuous",
+        "instruction": "Use the words in the word bank to complete each sentence in the past perfect or past perfect continuous. Use each verb once. (2 points × 5 = 10 points)",
+        "type": "fill",
+        "ptsPerQ": 2,
+        "bank": ["begin", "wait", "visit", "study", "stop"],
+        "qs": [
+          ["私たちが劇場に着いたとき、映画はすでに始まっていました。", "The movie ({{0}}) ({{1}}) when we arrived at the theater.", ["had", "begun"]],
+          ["彼女が電話したとき、私は30分間ずっと待っていました。", "I ({{0}}) been ({{1}}) for thirty minutes when she called.", ["had", "waiting"]],
+          ["彼はその美術館に行ったことがありませんでした。", "He ({{0}}) never ({{1}}) that museum before.", ["had", "visited"]],
+          ["先生が教室に入ったとき、私たちは1時間勉強していました。", "We ({{0}}) been ({{1}}) for an hour when the teacher entered.", ["had", "studying"]],
+          ["試合が始まる前に、雨は止んでいました。", "The rain ({{0}}) ({{1}}) before the game started.", ["had", "stopped"]]
+        ],
+        "answers": [["had", "begun"], ["had", "waiting"], ["had", "visited"], ["had", "studying"], ["had", "stopped"]]
+      },
+      {
+        "title": "3. Past Participles",
+        "instruction": "Write the past participle form of each verb. (1 point × 20 = 20 points)",
+        "type": "verb",
+        "ptsPerQ": 1,
+        "qs": [
+          ["begin", ""], ["choose", ""], ["drive", ""], ["eat", ""], ["forget", ""],
+          ["give", ""], ["grow", ""], ["hear", ""], ["keep", ""], ["make", ""],
+          ["meet", ""], ["pay", ""], ["ride", ""], ["send", ""], ["sing", ""],
+          ["speak", ""], ["take", ""], ["teach", ""], ["think", ""], ["wear", ""]
+        ],
+        "answers": ["begun", "chosen", "driven", "eaten", "forgotten", "given", "grown", "heard", "kept", "made", "met", "paid", "ridden", "sent", "sung", "spoken", "taken", "taught", "thought", "worn"]
+      },
+      {
+        "title": "4. Expressions and Modal Verbs",
+        "instruction": "Complete each sentence using an appropriate expression from the word bank. Use each expression once. (1 point × 10 = 10 points)",
+        "type": "fill",
+        "ptsPerQ": 1,
+        "bank": ["was able", "couldn't", "added", "rained", "had", "studying", "swim", "visit", "cleaned", "wouldn't"],
+        "qs": [
+          ["私は急いだので、最終バスに乗ることができました。", "I ({{0}}) to catch the last bus because I hurried.", ["was able"]],
+          ["彼は緊張していて、質問に答えられませんでした。", "He ({{0}}) answer the question because he was nervous.", ["couldn't"]],
+          ["あなたはコーヒーに砂糖を入れすぎたかもしれません。", "You may have ({{0}}) too much sugar to your coffee.", ["added"]],
+          ["昨夜、雪が降ったのかもしれません。", "It may have ({{0}}) last night.", ["rained"]],
+          ["彼は十分に眠ったに違いありません。", "He must have ({{0}}) a good night's sleep.", ["had"]],
+          ["彼女はその時、勉強していたはずがありません。", "She can't have been ({{0}}) at that time.", ["studying"]],
+          ["子どものころ、私はよく川で泳いだものです。", "I would often ({{0}}) in the river when I was a child.", ["swim"]],
+          ["以前、私たちは毎年祖父母を訪ねたものでした。", "We used to ({{0}}) our grandparents every year.", ["visit"]],
+          ["あなたは机を片付けるべきだったのに。", "You should have ({{0}}) your desk.", ["cleaned"]],
+          ["その古い窓はどうしても開きませんでした。", "The old window ({{0}}) open.", ["wouldn't"]]
+        ],
+        "answers": [["was able"], ["couldn't"], ["added"], ["rained"], ["had"], ["studying"], ["swim"], ["visit"], ["cleaned"], ["wouldn't"]]
+      },
+      {
+        "title": "5. Future Perfect and Modal Expressions",
+        "instruction": "Complete each sentence using the words in the word bank. Add by, for, before or other necessary words where appropriate. (2 points × 5 = 10 points)",
+        "type": "fill",
+        "ptsPerQ": 2,
+        "bank": ["understood", "by", "belonged", "for", "forgotten", "by", "known", "before", "completed", "by"],
+        "qs": [
+          ["この授業が終わるころには、あなたはこの文法を理解しているでしょう。", "You will have ({{0}}) this grammar ({{1}}) the end of this lesson.", ["understood", "by"]],
+          ["来年の春で、彼らはこのチームに5年間所属したことになります。", "They will have ({{0}}) to this team ({{1}}) five years next spring.", ["belonged", "for"]],
+          ["来週までには、彼女はその出来事を忘れているでしょう。", "She will have ({{0}}) the event ({{1}}) next week.", ["forgotten", "by"]],
+          ["私たちが高校に入学したとき、私は彼と3年間知り合いでした。", "I had ({{0}}) him for three years ({{1}}) we entered high school.", ["known", "before"]],
+          ["金曜日までには、彼らはその橋を完成させているでしょう。", "They will have ({{0}}) the bridge ({{1}}) Friday.", ["completed", "by"]]
+        ],
+        "answers": [["understood", "by"], ["belonged", "for"], ["forgotten", "by"], ["known", "before"], ["completed", "by"]]
+      },
+      {
+        "title": "6. Word Order",
+        "instruction": "Rearrange the words in parentheses to make a correct sentence. Write the complete sentence. (2 points × 10 = 20 points)",
+        "type": "reorder",
+        "ptsPerQ": 2,
+        "qs": [
+          ["私が家に帰ったとき、母はすでに夕食を作っていました。", "My mother ( dinner / had / already / cooked ) when I got home.", "My mother had already cooked dinner when I got home."],
+          ["彼は日本に来る前に、韓国に住んでいました。", "He ( Korea / had / in / lived ) before he came to Japan.", "He had lived in Korea before he came to Japan."],
+          ["私たちが到着するころには、コンサートは終わっているでしょう。", "The concert ( have / will / finished ) by the time we arrive.", "The concert will have finished by the time we arrive."],
+          ["彼女はその本を読んだことがあるかもしれません。", "She ( book / may / read / have / the ).", "She may have read the book."],
+          ["彼がそんなに早く帰ったはずがありません。", "He ( home / have / can't / gone ) so early.", "He can't have gone home so early."],
+          ["私はその時、何も言うことができませんでした。", "I ( anything / say / couldn't ) at that time.", "I couldn't say anything at that time."],
+          ["あなたはここで写真を撮ってもいいですよ。", "You ( pictures / take / can ) here.", "You can take pictures here."],
+          ["私たちは彼女が来るまで1時間待っていました。", "We ( an hour / waiting / had / been / for ) until she came.", "We had been waiting for an hour until she came."],
+          ["彼は今ごろ家に着いているはずです。", "He ( arrived / should / have ) home by now.", "He should have arrived home by now."],
+          ["その少年は近所に住んでいるかもしれません。", "The boy ( live / may / neighborhood / in / my ).", "The boy may live in my neighborhood."]
+        ],
+        "answers": [
+          "My mother had already cooked dinner when I got home.",
+          "He had lived in Korea before he came to Japan.",
+          "The concert will have finished by the time we arrive.",
+          "She may have read the book.",
+          "He can't have gone home so early.",
+          "I couldn't say anything at that time.",
+          "You can take pictures here.",
+          "We had been waiting for an hour until she came.",
+          "He should have arrived home by now.",
+          "The boy may live in my neighborhood."
+        ]
+      },
+      {
+        "title": "7. Translation into Japanese",
+        "instruction": "Translate the following sentences into natural Japanese. Check your answer against the model translation and enter your self-score (0–2 points each). (2 points × 4 = 8 points)",
+        "type": "translate",
+        "ptsPerQ": 2,
+        "qs": [
+          ["I had already finished my report when my friend called.", "友達が電話してきたとき、（　　　　　　　　　　　　　　　）。", "私はすでにレポートを終えていました。"],
+          ["Will you be able to join the school festival tomorrow?", "明日の文化祭に（　　　　　　　　　　　　　　　）？", "参加することができますか。"],
+          ["You may have left your umbrella on the train.", "あなたは（　　　　　　　　　　　　　　　）。", "電車に傘を置き忘れたのかもしれません。"],
+          ["She can't have forgotten our appointment.", "彼女が（　　　　　　　　　　　　　　　）。", "私たちとの約束を忘れたはずがありません。"]
+        ],
+        "answers": ["私はすでにレポートを終えていました。", "参加することができますか。", "電車に傘を置き忘れたのかもしれません。", "私たちとの約束を忘れたはずがありません。"]
+      },
+      {
+        "title": "8. Writing",
+        "instruction": "Read each instruction carefully and write one original sentence in English (at least 5 words, do not copy examples). Then check the criteria and enter your self-score (0–3 points each). (3 points × 4 = 12 points)",
+        "type": "writing",
+        "ptsPerQ": 3,
+        "qs": [
+          ["A. Use the past perfect (had + past participle).", "Example: The train had already left when I arrived."],
+          ["B. Use a modal + have + past participle to express a possibility about the past.", "Example: He may have missed the bus."],
+          ["C. Use the future perfect (will have + past participle).", "Example: I will have finished this book by Sunday."],
+          ["D. Use the past perfect continuous (had been + -ing).", "Example: We had been walking for an hour."]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "B",
+    "title": "Mock Examination 2",
+    "subtitle": "Lesson 5: Tenses / Lesson 6: Auxiliary Verbs",
+    "sections": [
+      {
+        "title": "1. Vocabulary and Modal Verbs",
+        "instruction": "Choose the appropriate words from the word bank and complete each sentence. Use each word only once. (1 point × 10 = 10 points)",
+        "type": "fill",
+        "ptsPerQ": 1,
+        "bank": ["can", "may", "can't", "had", "will", "translate", "stayed", "must", "have", "can"],
+        "qs": [
+          ["彼女は上手にピアノを弾くことができます。", "She ({{0}}) play the piano well.", ["can"]],
+          ["彼は道に迷ったのかもしれません。", "He ({{0}}) be lost.", ["may"]],
+          ["彼女が一人でこの箱を運んだはずがありません。", "She ({{0}}) have carried this box alone.", ["can't"]],
+          ["私たちが駅に着いたとき、電車はすでに出発していました。", "The train ({{0}}) already left when we arrived at the station.", ["had"]],
+          ["金曜日までには、私はその本を読み終えているでしょう。", "I ({{0}}) have finished the book by Friday.", ["will"]],
+          ["この文章を英語に翻訳できますか。", "Can you ({{0}}) this sentence into English?", ["translate"]],
+          ["彼女は東京に来る前、札幌に滞在していました。", "She had ({{0}}) in Sapporo before she came to Tokyo.", ["stayed"]],
+          ["彼は今ごろ空港に着いているに違いありません。", "He ({{0}}) have arrived at the airport by now.", ["must"]],
+          ["彼らはその知らせを聞いたことがあるかもしれません。", "They may ({{0}}) heard the news.", ["have"]],
+          ["子どもはいつでも間違いをすることがあります。", "Children ({{0}}) make mistakes at any time.", ["can"]]
+        ],
+        "answers": [["can"], ["may"], ["can't"], ["had"], ["will"], ["translate"], ["stayed"], ["must"], ["have"], ["can"]]
+      },
+      {
+        "title": "2. Past Perfect / Past Perfect Continuous",
+        "instruction": "Use the words in the word bank to complete each sentence in the past perfect or past perfect continuous. Use each verb once. (2 points × 5 = 10 points)",
+        "type": "fill",
+        "ptsPerQ": 2,
+        "bank": ["leave", "practice", "meet", "work", "stop"],
+        "qs": [
+          ["私たちが空港に着いたとき、飛行機はすでに出発していました。", "The plane ({{0}}) already ({{1}}) when we reached the airport.", ["had", "left"]],
+          ["彼が戻ってきたとき、私は2時間ピアノを練習していました。", "I ({{0}}) been ({{1}}) the piano for two hours when he came back.", ["had", "practicing"]],
+          ["私は彼女に会う前に、その映画を見たことがありました。", "I ({{0}}) ({{1}}) that movie before I met her.", ["had", "seen"]],
+          ["父が帰宅したとき、母は一日中働いていました。", "My mother ({{0}}) been ({{1}}) all day when my father came home.", ["had", "working"]],
+          ["私たちが外に出る前に、風は止んでいました。", "The wind ({{0}}) ({{1}}) before we went outside.", ["had", "stopped"]]
+        ],
+        "answers": [["had", "left"], ["had", "practicing"], ["had", "seen"], ["had", "working"], ["had", "stopped"]]
+      },
+      {
+        "title": "3. Past Participles",
+        "instruction": "Write the past participle form of each verb. (1 point × 20 = 20 points)",
+        "type": "verb",
+        "ptsPerQ": 1,
+        "qs": [
+          ["break", ""], ["build", ""], ["buy", ""], ["come", ""], ["cut", ""],
+          ["draw", ""], ["drink", ""], ["fall", ""], ["fly", ""], ["hold", ""],
+          ["know", ""], ["lose", ""], ["read", ""], ["run", ""], ["sell", ""],
+          ["sit", ""], ["sleep", ""], ["throw", ""], ["understand", ""], ["write", ""]
+        ],
+        "answers": ["broken", "built", "bought", "come", "cut", "drawn", "drunk", "fallen", "flown", "held", "known", "lost", "read", "run", "sold", "sat", "slept", "thrown", "understood", "written"]
+      },
+      {
+        "title": "4. Expressions and Modal Verbs",
+        "instruction": "Complete each sentence using an appropriate expression from the word bank. Use each expression once. (1 point × 10 = 10 points)",
+        "type": "fill",
+        "ptsPerQ": 1,
+        "bank": ["were able", "couldn't", "put", "snowed", "taken", "driving", "play", "walk", "studied", "wouldn't"],
+        "qs": [
+          ["私たちは一生懸命走ったので、電車に間に合うことができました。", "We ({{0}}) to catch the train because we ran hard.", ["were able"]],
+          ["彼女は忙しかったので、私たちと昼食を食べることができませんでした。", "She ({{0}}) have lunch with us because she was busy.", ["couldn't"]],
+          ["あなたはその書類を間違った場所に置いたかもしれません。", "You may have ({{0}}) the document in the wrong place.", ["put"]],
+          ["昨夜、山の上では雪が降ったのかもしれません。", "It may have ({{0}}) on the mountain last night.", ["snowed"]],
+          ["彼はその薬を飲んだに違いありません。", "He must have ({{0}}) the medicine.", ["taken"]],
+          ["彼女は注意深く運転していたはずがありません。", "She can't have been ({{0}}) carefully.", ["driving"]],
+          ["子どものころ、弟はよくチェスをしたものです。", "My brother would often ({{0}}) chess when he was a child.", ["play"]],
+          ["以前、私は毎朝学校まで歩いたものでした。", "I used to ({{0}}) to school every morning.", ["walk"]],
+          ["あなたはもっと一生懸命勉強すべきだったのに。", "You should have ({{0}}) harder.", ["studied"]],
+          ["この引き出しはどうしても閉まりませんでした。", "This drawer ({{0}}) close.", ["wouldn't"]]
+        ],
+        "answers": [["were able"], ["couldn't"], ["put"], ["snowed"], ["taken"], ["driving"], ["play"], ["walk"], ["studied"], ["wouldn't"]]
+      },
+      {
+        "title": "5. Future Perfect and Modal Expressions",
+        "instruction": "Complete each sentence using the words in the word bank. Add by, for, before or other necessary words where appropriate. (2 points × 5 = 10 points)",
+        "type": "fill",
+        "ptsPerQ": 2,
+        "bank": ["learned", "by", "worked", "for", "finished", "by", "known", "before", "for", "by"],
+        "qs": [
+          ["明日の朝までには、私はこれらの単語を覚えているでしょう。", "I will have ({{0}}) these words ({{1}}) tomorrow morning.", ["learned", "by"]],
+          ["来月で、彼はこの会社で10年間働いたことになります。", "He will have ({{0}}) at this company ({{1}}) ten years next month.", ["worked", "for"]],
+          ["金曜日までには、私たちはその準備を終えているでしょう。", "We will have ({{0}}) the preparations ({{1}}) Friday.", ["finished", "by"]],
+          ["私が中学生になったとき、私は彼女と5年間知り合いでした。", "I had ({{0}}) her for five years ({{1}}) I became a junior high school student.", ["known", "before"]],
+          ["来年の夏までには、彼らはこの町に10年間住んでいることになります。", "They will have lived in this town ({{0}}) ten years ({{1}}) next summer.", ["for", "by"]]
+        ],
+        "answers": [["learned", "by"], ["worked", "for"], ["finished", "by"], ["known", "before"], ["for", "by"]]
+      },
+      {
+        "title": "6. Word Order",
+        "instruction": "Rearrange the words in parentheses to make a correct sentence. Write the complete sentence. (2 points × 10 = 20 points)",
+        "type": "reorder",
+        "ptsPerQ": 2,
+        "qs": [
+          ["私たちが映画館に着いたとき、映画はすでに始まっていました。", "The movie ( already / had / started ) when we arrived at the theater.", "The movie had already started when we arrived at the theater."],
+          ["彼女は日本に来る前に、カナダに住んでいました。", "She ( Canada / in / had / lived ) before she came to Japan.", "She had lived in Canada before she came to Japan."],
+          ["私が戻るころには、彼らは昼食を食べ終えているでしょう。", "They ( have / eaten / will ) lunch by the time I return.", "They will have eaten lunch by the time I return."],
+          ["彼は鍵を家に忘れたのかもしれません。", "He ( his / may / forgotten / have ) key at home.", "He may have forgotten his key at home."],
+          ["彼女がそんなに疲れているはずがありません。", "She ( can't / tired / be ) so tired.", "She can't be so tired."],
+          ["私はその質問に答えることができませんでした。", "I ( answer / the / couldn't / question ).", "I couldn't answer the question."],
+          ["あなたはこの部屋を使ってもいいですよ。", "You ( this / use / can / room ).", "You can use this room."],
+          ["彼が到着するまで、私たちはずっと話していました。", "We ( talking / had / been ) until he arrived.", "We had been talking until he arrived."],
+          ["彼らはすでに駅に着いているはずです。", "They ( have / should / reached ) the station by now.", "They should have reached the station by now."],
+          ["その知らせは本当かもしれません。", "The news ( be / may / true ).", "The news may be true."]
+        ],
+        "answers": [
+          "The movie had already started when we arrived at the theater.",
+          "She had lived in Canada before she came to Japan.",
+          "They will have eaten lunch by the time I return.",
+          "He may have forgotten his key at home.",
+          "She can't be so tired.",
+          "I couldn't answer the question.",
+          "You can use this room.",
+          "We had been talking until he arrived.",
+          "They should have reached the station by now.",
+          "The news may be true."
+        ]
+      },
+      {
+        "title": "7. Translation into Japanese",
+        "instruction": "Translate the following sentences into natural Japanese. Check your answer against the model translation and enter your self-score (0–2 points each). (2 points × 4 = 8 points)",
+        "type": "translate",
+        "ptsPerQ": 2,
+        "qs": [
+          ["When we arrived, the shop had already closed.", "私たちが着いたとき、（　　　　　　　　　　　　　　　）。", "店はすでに閉まっていました。"],
+          ["Will she be able to finish the work by tomorrow?", "彼女は明日までに（　　　　　　　　　　　　　　　）？", "その仕事を終えることができますか。"],
+          ["They might have missed the last bus.", "彼らは（　　　　　　　　　　　　　　　）。", "最終バスに乗り遅れたのかもしれません。"],
+          ["He can't have written this message.", "彼が（　　　　　　　　　　　　　　　）。", "このメッセージを書いたはずがありません。"]
+        ],
+        "answers": ["店はすでに閉まっていました。", "その仕事を終えることができますか。", "最終バスに乗り遅れたのかもしれません。", "このメッセージを書いたはずがありません。"]
+      },
+      {
+        "title": "8. Writing",
+        "instruction": "Read each instruction carefully and write one original sentence in English (at least 5 words, do not copy examples). Then check the criteria and enter your self-score (0–3 points each). (3 points × 4 = 12 points)",
+        "type": "writing",
+        "ptsPerQ": 3,
+        "qs": [
+          ["A. Use the past perfect (had + past participle).", "Example: I had eaten breakfast before I left home."],
+          ["B. Use a modal + have + past participle to express a possibility about the past.", "Example: She might have taken my notebook."],
+          ["C. Use the future perfect (will have + past participle).", "Example: We will have arrived by six o'clock."],
+          ["D. Use the past perfect continuous (had been + -ing).", "Example: He had been studying for two hours."]
+        ]
+      }
+    ]
+  }
+];
+
+/**
+ * Application State
+ */
+let currentExam = null;
+// State per section: { attempts: 0 | 1 | 2, finalized: boolean, score: number, maxScore: number, qResults: boolean[] }
+let sectionStates = [];
+
+const $ = id => document.getElementById(id);
+
+function esc(str) {
+  return String(str).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+function normalizeText(str) {
+  return String(str || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[’‘']/g, "'")
+    .replace(/[.!?。、「」]/g, '')
+    .replace(/\s+/g, ' ');
+}
+
+/**
+ * Custom Modal Helpers (Never uses window.alert / window.confirm)
+ */
+function showModal({ title, message, confirmText = 'OK', cancelText = null, onConfirm = null, isDanger = false }) {
+  $('modalTitle').textContent = title;
+  $('modalMessage').textContent = message;
+  const actions = $('modalActions');
+  actions.innerHTML = '';
+
+  if (cancelText) {
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition';
+    cancelBtn.textContent = cancelText;
+    cancelBtn.onclick = closeModal;
+    actions.appendChild(cancelBtn);
+  }
+
+  const okBtn = document.createElement('button');
+  okBtn.className = isDanger
+    ? 'px-4 py-2 rounded-xl text-sm font-bold bg-rose-600 hover:bg-rose-700 text-white transition'
+    : 'px-4 py-2 rounded-xl text-sm font-bold bg-[#28658d] hover:bg-[#183653] text-white transition';
+  okBtn.textContent = confirmText;
+  okBtn.onclick = () => {
+    closeModal();
+    if (onConfirm) onConfirm();
+  };
+  actions.appendChild(okBtn);
+
+  $('modalOverlay').classList.remove('hidden');
+  $('modalOverlay').classList.add('flex');
+}
+
+function closeModal() {
+  $('modalOverlay').classList.add('hidden');
+  $('modalOverlay').classList.remove('flex');
+}
+
+/**
+ * Render Home View
+ */
+function renderHome() {
+  $('examCards').innerHTML = exams.map(exam => `
+    <div class="border border-slate-200 rounded-2xl p-6 bg-slate-50/50 hover:bg-white hover:border-sky-300 hover:shadow-md transition flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-sky-100 text-[#183653]">100 POINTS</span>
+          <span class="text-xs font-medium text-slate-500">68 Questions · 8 Subsections</span>
+        </div>
+        <h3 class="text-xl font-bold text-[#183653]">${esc(exam.title)}</h3>
+        <p class="text-sm text-slate-600 mt-1">${esc(exam.subtitle)}</p>
+        <ul class="mt-4 space-y-1.5 text-xs text-slate-500">
+          <li class="flex items-center gap-1.5"><span class="text-emerald-600 font-bold">✓</span> Check answers section-by-section</li>
+          <li class="flex items-center gap-1.5"><span class="text-amber-600 font-bold">↻</span> 1 retry opportunity for incorrect items</li>
+          <li class="flex items-center gap-1.5"><span class="text-sky-600 font-bold">★</span> Full score breakdown upon completion</li>
+        </ul>
+      </div>
+      <div class="mt-6 pt-4 border-t border-slate-200/70">
+        <button onclick="startExam('${exam.id}')" class="w-full py-3 px-4 rounded-xl bg-[#28658d] hover:bg-[#183653] text-white font-bold text-sm shadow-xs transition">
+          Start Online Exam / オンライン試験を開始 →
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+/**
+ * Start Selected Exam
+ */
+function startExam(examId) {
+  currentExam = exams.find(e => e.id === examId);
+  if (!currentExam) return;
+
+  // Initialize section states
+  sectionStates = currentExam.sections.map(sec => ({
+    attempts: 0,
+    finalized: false,
+    score: 0,
+    maxScore: sec.qs.length * sec.ptsPerQ,
+    qResults: new Array(sec.qs.length).fill(false)
+  }));
+
+  $('homeView').classList.add('hidden');
+  $('examView').classList.remove('hidden');
+  $('examTag').textContent = 'MOCK EXAM ' + examId;
+  $('examTitle').textContent = currentExam.title;
+  $('studentName').value = '';
+  $('finalResultsBox').classList.add('hidden');
+  $('finalResultsBox').innerHTML = '';
+
+  renderAllSubsections();
+  updateOverallProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function requestGoHome() {
+  showModal({
+    title: 'Return to Exam Selection? / 試験選択画面に戻りますか？',
+    message: 'Your current progress in this exam will be cleared. / 現在の解答状況はリセットされます。',
+    confirmText: 'Leave Exam / 戻る',
+    cancelText: 'Stay / 続ける',
+    isDanger: true,
+    onConfirm: () => {
+      $('examView').classList.add('hidden');
+      $('homeView').classList.remove('hidden');
+      currentExam = null;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+}
+
+function requestResetExam() {
+  if (!currentExam) return;
+  showModal({
+    title: 'Reset Entire Exam? / 試験をリセットしますか？',
+    message: 'All answers and section attempts will be cleared so you can start fresh. / すべての解答と採点履歴が消去されます。',
+    confirmText: 'Reset / リセット',
+    cancelText: 'Cancel / キャンセル',
+    isDanger: true,
+    onConfirm: () => startExam(currentExam.id)
+  });
+}
+
+/**
+ * Render All 8 Subsections as Independent Interactive Cards
+ */
+function renderAllSubsections() {
+  const container = $('sectionsContainer');
+  container.innerHTML = currentExam.sections.map((sec, si) => {
+    const maxPts = sec.qs.length * sec.ptsPerQ;
+    let html = `
+      <section id="sec-card-${si}" class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm transition-all">
+        <!-- Subsection Header -->
+        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pb-4 border-b border-slate-100">
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 class="text-lg sm:text-xl font-bold text-[#183653]">${esc(sec.title)}</h3>
+              <span id="sec-status-${si}" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600">
+                Not Checked / 未採点
+              </span>
+            </div>
+            <p class="text-sm text-slate-500 mt-1.5 leading-relaxed">${esc(sec.instruction)}</p>
+          </div>
+          <div class="text-right shrink-0">
+            <span id="sec-score-badge-${si}" class="inline-block px-3 py-1 rounded-lg bg-slate-50 border border-slate-200 text-xs font-bold text-slate-600">
+              ${maxPts} pts
+            </span>
+          </div>
+        </div>
+    `;
+
+    // Word bank if present
+    if (sec.bank) {
+      html += `
+        <div class="mt-4 bg-sky-50/70 border border-dashed border-sky-200 rounded-xl p-3.5 text-sm">
+          <span class="font-bold text-[#183653] mr-1">Word bank / 語群：</span>
+          <div class="inline-flex flex-wrap gap-1.5 mt-1 sm:mt-0">
+            ${sec.bank.map(w => `<span class="px-2.5 py-0.5 bg-white border border-sky-200/80 rounded-md text-slate-800 font-medium text-xs sm:text-sm shadow-2xs">${esc(w)}</span>`).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Questions List
+    html += `<div class="divide-y divide-slate-100 mt-3">`;
+    sec.qs.forEach((q, qi) => {
+      html += `<div id="q-row-s${si}q${qi}" class="py-4 first:pt-2 last:pb-2">`;
+      html += `<div class="font-semibold text-slate-800 text-sm sm:text-base mb-1.5"><span class="text-[#28658d] font-bold mr-1">(${qi + 1})</span> ${esc(q[0])}</div>`;
+
+      if (sec.type === 'fill') {
+        const sentenceHtml = q[1].replace(/\{\{(\d+)\}\}/g, (_, idx) => {
+          return `<input type="text" data-sec="${si}" data-q="${qi}" data-blank="${idx}" autocomplete="off"
+            class="inline-block w-32 sm:w-36 px-2.5 py-1.5 mx-1 my-0.5 text-sm sm:text-base border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#28658d] bg-white transition"
+            aria-label="Question ${qi + 1} blank ${Number(idx) + 1}">`;
+        });
+        html += `<div class="text-slate-700 text-sm sm:text-base leading-relaxed pl-1">${sentenceHtml}</div>`;
+      } else if (sec.type === 'verb') {
+        html += `
+          <div class="flex flex-wrap items-center gap-2 pl-1 mt-1">
+            <span class="text-sm font-medium text-slate-500">Past participle / 過去分詞：</span>
+            <input type="text" data-sec="${si}" data-q="${qi}" data-blank="0" autocomplete="off"
+              class="w-44 sm:w-52 px-3 py-1.5 text-sm sm:text-base border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#28658d] bg-white transition"
+              placeholder="Type past participle">
+          </div>
+        `;
+      } else if (sec.type === 'reorder') {
+        html += `
+          <div class="text-slate-700 text-sm sm:text-base mb-2 pl-1 font-medium">${esc(q[1])}</div>
+          <div class="pl-1">
+            <input type="text" data-sec="${si}" data-q="${qi}" data-blank="0" autocomplete="off"
+              class="w-full max-w-2xl px-3 py-2 text-sm sm:text-base border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#28658d] bg-white transition"
+              placeholder="Write the complete sentence / 正しい英文を入力してください">
+          </div>
+        `;
+      } else if (sec.type === 'translate') {
+        html += `
+          <div class="text-slate-600 text-sm mb-2 pl-1">${esc(q[1])}</div>
+          <div class="pl-1">
+            <textarea data-sec="${si}" data-q="${qi}" data-blank="0" rows="2"
+              class="w-full max-w-2xl px-3 py-2 text-sm sm:text-base border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#28658d] bg-white transition"
+              placeholder="日本語訳を入力してください"></textarea>
+          </div>
+        `;
+      } else if (sec.type === 'writing') {
+        html += `
+          <div class="text-slate-500 text-xs sm:text-sm mb-2 pl-1 italic">${esc(q[1])}</div>
+          <div class="pl-1">
+            <textarea data-sec="${si}" data-q="${qi}" data-blank="0" rows="2"
+              class="w-full max-w-2xl px-3 py-2 text-sm sm:text-base border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#28658d] bg-white transition"
+              placeholder="Write your original English sentence here (at least 5 words)..."></textarea>
+          </div>
+        `;
+      }
+
+      // Per-question feedback area
+      html += `<div id="fb-s${si}q${qi}" class="mt-2 pl-1 text-xs sm:text-sm"></div>`;
+      html += `</div>`;
+    });
+    html += `</div>`;
+
+    // Subsection Footer: Check Button & Section Banner
+    html += `
+      <div class="mt-5 pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 no-print">
+        <div id="sec-banner-${si}" class="text-sm font-medium text-slate-500">
+          Complete all items in this subsection, then check your answers.
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="sec-btn-${si}" onclick="checkSubsection(${si})"
+            class="px-5 py-2.5 rounded-xl font-bold text-sm text-white bg-[#28658d] hover:bg-[#183653] shadow-xs transition">
+            Check all answers in this section
+          </button>
+        </div>
+      </div>
+    </section>
+    `;
+    return html;
+  }).join('');
+}
+
+/**
+ * Validate and Check a Single Subsection (Supports 1st check + 1 retry if incorrect)
+ */
+function checkSubsection(si) {
+  const sec = currentExam.sections[si];
+  const state = sectionStates[si];
+  if (state.finalized) return;
+
+  // Verify all inputs in this subsection are filled before checking
+  const inputs = [...document.querySelectorAll(`[data-sec="${si}"]`)];
+  const emptyInputs = inputs.filter(el => !el.disabled && el.value.trim() === '');
+
+  if (emptyInputs.length > 0) {
+    emptyInputs[0].focus();
+    showModal({
+      title: 'Incomplete Section / 未入力の項目があります',
+      message: `Please complete all questions in "${sec.title}" before checking your answers. (${emptyInputs.length} blank field(s) remaining.) / このセクションのすべての空欄に入力してから確認ボタンを押してください。`
+    });
+    return;
+  }
+
+  // Handle Manual Self-Assessment Sections (7. Translation & 8. Writing)
+  if (sec.type === 'translate' || sec.type === 'writing') {
+    handleSelfCheckSubsection(si);
+    return;
+  }
+
+  // Handle Auto-Graded Sections (1 to 6)
+  state.attempts += 1;
+  const isFirstAttempt = state.attempts === 1;
+  let allCorrect = true;
+  let sectionPoints = 0;
+
+  sec.qs.forEach((q, qi) => {
+    const qInputs = [...document.querySelectorAll(`[data-sec="${si}"][data-q="${qi}"]`)];
+    const fbEl = $(`fb-s${si}q${qi}`);
+    let isQCorrect = false;
+    let displayAnswer = '';
+
+    if (sec.type === 'fill') {
+      const ansArr = sec.answers[qi];
+      let correctBlanks = 0;
+      ansArr.forEach((expected, bi) => {
+        const userVal = normalizeText(qInputs[bi]?.value);
+        const accepted = Array.isArray(expected) ? expected : [expected];
+        if (accepted.some(a => normalizeText(a) === userVal)) {
+          correctBlanks++;
+        }
+      });
+      isQCorrect = (correctBlanks === ansArr.length);
+      displayAnswer = ansArr.map(a => Array.isArray(a) ? a[0] : a).join(' / ');
+    } else if (sec.type === 'verb') {
+      const expected = sec.answers[qi];
+      const userVal = normalizeText(qInputs[0]?.value);
+      isQCorrect = (userVal === normalizeText(expected));
+      displayAnswer = expected;
+    } else if (sec.type === 'reorder') {
+      const expected = sec.answers[qi];
+      const userVal = normalizeText(qInputs[0]?.value);
+      isQCorrect = (userVal === normalizeText(expected));
+      displayAnswer = expected;
+    }
+
+    state.qResults[qi] = isQCorrect;
+    if (isQCorrect) {
+      sectionPoints += sec.ptsPerQ;
+      // Lock correct inputs & style green
+      qInputs.forEach(inp => {
+        inp.disabled = true;
+        inp.classList.remove('border-slate-300', 'border-rose-400', 'bg-rose-50/50', 'border-amber-400', 'bg-amber-50/40');
+        inp.classList.add('border-emerald-500', 'bg-emerald-50/60', 'text-emerald-900', 'font-semibold');
+      });
+      fbEl.innerHTML = `<span class="inline-flex items-center gap-1 text-emerald-700 font-bold">✓ Correct! / 正解 (+${sec.ptsPerQ} pt${sec.ptsPerQ > 1 ? 's' : ''})</span>`;
+    } else {
+      allCorrect = false;
+      if (isFirstAttempt) {
+        // Give 1 retry opportunity without revealing exact answer yet
+        qInputs.forEach(inp => {
+          inp.classList.remove('border-slate-300');
+          inp.classList.add('border-amber-400', 'bg-amber-50/40', 'text-slate-900');
+        });
+        fbEl.innerHTML = `<span class="inline-flex items-center gap-1 text-amber-700 font-bold">↻ Incorrect — You have 1 more chance! Edit your answer and re-check. / 不正解です。もう一度だけ修正できます。</span>`;
+      } else {
+        // Final attempt exhausted: lock inputs and reveal correct answer
+        qInputs.forEach(inp => {
+          inp.disabled = true;
+          inp.classList.remove('border-slate-300', 'border-amber-400', 'bg-amber-50/40');
+          inp.classList.add('border-rose-400', 'bg-rose-50/50', 'text-rose-900');
+        });
+        fbEl.innerHTML = `
+          <div class="text-rose-700 font-bold">✗ Incorrect / 不正解 (0 pts)</div>
+          <div class="text-slate-700 mt-0.5"><span class="font-semibold text-slate-900">Correct Answer / 正解:</span> ${esc(displayAnswer)}</div>
+        `;
+      }
+    }
+  });
+
+  state.score = sectionPoints;
+
+  const statusBadge = $(`sec-status-${si}`);
+  const scoreBadge = $(`sec-score-badge-${si}`);
+  const banner = $(`sec-banner-${si}`);
+  const btn = $(`sec-btn-${si}`);
+  const card = $(`sec-card-${si}`);
+
+  if (allCorrect || !isFirstAttempt) {
+    // Section is now finalized
+    state.finalized = true;
+    scoreBadge.textContent = `${state.score} / ${state.maxScore} pts`;
+
+    if (allCorrect) {
+      statusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800';
+      statusBadge.textContent = '✓ Completed (Perfect)';
+      scoreBadge.className = 'inline-block px-3 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800';
+      card.classList.add('border-emerald-200');
+      banner.innerHTML = `<span class="text-emerald-700 font-bold">Great job! All answers in this section are correct. / すばらしい！全問正解です。</span>`;
+    } else {
+      statusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-100 text-[#183653]';
+      statusBadge.textContent = 'Completed (2/2 Attempts)';
+      scoreBadge.className = 'inline-block px-3 py-1 rounded-lg bg-sky-50 border border-sky-200 text-xs font-bold text-[#183653]';
+      banner.innerHTML = `<span class="text-slate-700 font-semibold">Section finalized. Review the correct answers above. / このセクションの採点が完了しました。</span>`;
+    }
+
+    btn.textContent = 'Section Completed ✓';
+    btn.disabled = true;
+    btn.className = 'px-5 py-2.5 rounded-xl font-bold text-sm text-emerald-800 bg-emerald-100 cursor-default';
+  } else {
+    // First attempt had errors -> Offer second chance
+    statusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800';
+    statusBadge.textContent = 'Attempt 1/2 · 1 Retry Left';
+    scoreBadge.textContent = `${state.score} / ${state.maxScore} pts (Tentative)`;
+    card.classList.add('border-amber-300');
+    banner.innerHTML = `<span class="text-amber-800 font-semibold">Some answers need correction. Fix the highlighted items and check again! / 間違えた箇所を修正してもう一度確認してください（残り1回）。</span>`;
+    btn.textContent = 'Re-check Section (Final Chance) / 再確認する（最後のチャンス）';
+    btn.className = 'px-5 py-2.5 rounded-xl font-bold text-sm text-white bg-amber-600 hover:bg-amber-700 shadow-xs transition';
+  }
+
+  updateOverallProgress();
+}
+
+/**
+ * Handle Subsections 7 (Translation) and 8 (Writing) with Self-Check Rubric & Confirmation
+ */
+function handleSelfCheckSubsection(si) {
+  const sec = currentExam.sections[si];
+  const state = sectionStates[si];
+
+  // Step 1: Reveal model answers / rubric and ask student to assign self-scores
+  if (state.attempts === 0) {
+    state.attempts = 1;
+    sec.qs.forEach((q, qi) => {
+      const ta = document.querySelector(`[data-sec="${si}"][data-q="${qi}"]`);
+      if (ta) {
+        ta.disabled = true;
+        ta.classList.add('bg-slate-50', 'text-slate-700');
+      }
+      const fbEl = $(`fb-s${si}q${qi}`);
+      if (sec.type === 'translate') {
+        fbEl.innerHTML = `
+          <div class="mt-2 p-3 rounded-xl bg-sky-50 border border-sky-200 text-slate-800 space-y-2">
+            <div><span class="font-bold text-[#183653]">Model Answer / 模範解答:</span> ${esc(q[2])}</div>
+            <div class="flex items-center gap-2">
+              <label class="font-semibold text-xs sm:text-sm text-slate-700">Self-Score / 自己採点 (0–2 pts):</label>
+              <select id="self-score-s${si}q${qi}" class="px-2.5 py-1 rounded-lg border border-slate-300 bg-white text-sm font-bold text-[#183653]">
+                <option value="2">2 pts (Accurate / 正確)</option>
+                <option value="1">1 pt (Partially correct / 一部正解)</option>
+                <option value="0">0 pts (Incorrect / 不正解)</option>
+              </select>
+            </div>
+          </div>
+        `;
+      } else {
+        fbEl.innerHTML = `
+          <div class="mt-2 p-3 rounded-xl bg-sky-50 border border-sky-200 text-slate-800 space-y-2">
+            <div class="text-xs sm:text-sm text-slate-700"><span class="font-bold text-[#183653]">Check Criteria / 採点基準:</span> Required grammar used accurately, at least 5 words, original sentence (not copied).</div>
+            <div class="flex items-center gap-2">
+              <label class="font-semibold text-xs sm:text-sm text-slate-700">Self-Score / 自己採点 (0–3 pts):</label>
+              <select id="self-score-s${si}q${qi}" class="px-2.5 py-1 rounded-lg border border-slate-300 bg-white text-sm font-bold text-[#183653]">
+                <option value="3">3 pts (Meets all criteria / 完璧)</option>
+                <option value="2">2 pts (Minor spelling/grammar slip / ほぼ正確)</option>
+                <option value="1">1 pt (Grammar/length issue / 要修正)</option>
+                <option value="0">0 pts (Does not meet criteria / 不正解)</option>
+              </select>
+            </div>
+          </div>
+        `;
+      }
+    });
+
+    const statusBadge = $(`sec-status-${si}`);
+    const banner = $(`sec-banner-${si}`);
+    const btn = $(`sec-btn-${si}`);
+    statusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800';
+    statusBadge.textContent = 'Self-Assessment / 自己採点中';
+    banner.innerHTML = `<span class="text-amber-800 font-semibold">Compare your answers with the criteria above, select your points, and confirm. / 模範解答・基準を確認し、自己採点を選択して確定してください。</span>`;
+    btn.textContent = 'Confirm Self-Scores / 自己採点を確定する';
+    btn.className = 'px-5 py-2.5 rounded-xl font-bold text-sm text-white bg-emerald-600 hover:bg-emerald-700 shadow-xs transition';
+    return;
+  }
+
+  // Step 2: Lock self-scores and finalize section
+  let totalSecPts = 0;
+  sec.qs.forEach((q, qi) => {
+    const sel = $(`self-score-s${si}q${qi}`);
+    const val = sel ? Number(sel.value) : 0;
+    totalSecPts += val;
+    if (sel) sel.disabled = true;
+    state.qResults[qi] = val === sec.ptsPerQ;
+  });
+
+  state.score = totalSecPts;
+  state.finalized = true;
+
+  const statusBadge = $(`sec-status-${si}`);
+  const scoreBadge = $(`sec-score-badge-${si}`);
+  const banner = $(`sec-banner-${si}`);
+  const btn = $(`sec-btn-${si}`);
+  const card = $(`sec-card-${si}`);
+
+  statusBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800';
+  statusBadge.textContent = '✓ Completed';
+  scoreBadge.textContent = `${state.score} / ${state.maxScore} pts`;
+  scoreBadge.className = 'inline-block px-3 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800';
+  card.classList.add('border-emerald-200');
+  banner.innerHTML = `<span class="text-emerald-700 font-bold">Self-assessment recorded (${state.score} / ${state.maxScore} pts). / 自己採点が確定しました。</span>`;
+  btn.textContent = 'Section Completed ✓';
+  btn.disabled = true;
+  btn.className = 'px-5 py-2.5 rounded-xl font-bold text-sm text-emerald-800 bg-emerald-100 cursor-default';
+
+  updateOverallProgress();
+}
+
+/**
+ * Update Overall Progress Bar & Unlock Final Score Button when all 8 sections are finalized
+ */
+function updateOverallProgress() {
+  const totalSections = sectionStates.length;
+  const completedCount = sectionStates.filter(s => s.finalized).length;
+  const pct = Math.round((completedCount / totalSections) * 100);
+
+  $('progressBar').style.width = `${pct}%`;
+  $('progressText').textContent = `${completedCount} / ${totalSections} subsections finalized`;
+  $('progressPercent').textContent = `${pct}%`;
+  $('sectionsCompletedBadge').textContent = `${completedCount} / ${totalSections} Sections Assessed`;
+
+  const checkBtn = $('checkFinalScoreBtn');
+  const hint = $('finalStatusHint');
+
+  if (completedCount === totalSections) {
+    checkBtn.disabled = false;
+    hint.innerHTML = `<span class="text-emerald-700 font-semibold">All 8 subsections are complete! Click "Check Total Score" to view your final result. / 全8セクションが完了しました！総合得点を確認できます。</span>`;
+  } else {
+    checkBtn.disabled = true;
+    const remaining = totalSections - completedCount;
+    hint.textContent = `Complete and finalize all ${totalSections} subsections above to unlock your final exam score (${remaining} remaining).`;
+  }
+}
+
+/**
+ * Calculate & Display Complete Exam Score Breakdown
+ */
+function calculateFinalScore() {
+  const totalScore = sectionStates.reduce((acc, s) => acc + s.score, 0);
+  const totalMax = sectionStates.reduce((acc, s) => acc + s.maxScore, 0);
+  const studentName = $('studentName').value.trim() || 'Student';
+
+  let gradeLabel = '';
+  let gradeColor = '';
+  if (totalScore >= 90) {
+    gradeLabel = 'Excellent! / 大変よくできました！';
+    gradeColor = 'text-emerald-700 bg-emerald-50 border-emerald-200';
+  } else if (totalScore >= 75) {
+    gradeLabel = 'Great Job! / よくできました！';
+    gradeColor = 'text-sky-700 bg-sky-50 border-sky-200';
+  } else if (totalScore >= 60) {
+    gradeLabel = 'Good Effort! / 合格ラインです！';
+    gradeColor = 'text-amber-700 bg-amber-50 border-amber-200';
+  } else {
+    gradeLabel = 'Keep Practicing! / 復習して再挑戦しましょう！';
+    gradeColor = 'text-rose-700 bg-rose-50 border-rose-200';
+  }
+
+  const breakdownRows = currentExam.sections.map((sec, si) => {
+    const st = sectionStates[si];
+    const isPerfect = st.score === st.maxScore;
+    return `
+      <tr class="border-b border-slate-100 last:border-0">
+        <td class="py-2.5 pr-4 text-sm font-medium text-slate-800">${esc(sec.title)}</td>
+        <td class="py-2.5 px-3 text-xs text-slate-500 text-center">${sec.type === 'translate' || sec.type === 'writing' ? 'Self-assessed' : `${st.attempts} attempt(s)`}</td>
+        <td class="py-2.5 pl-4 text-sm font-bold text-right ${isPerfect ? 'text-emerald-700' : 'text-[#183653]'}">
+          ${st.score} / ${st.maxScore} pts
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  const resultsBox = $('finalResultsBox');
+  resultsBox.innerHTML = `
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-200">
+      <div>
+        <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Official Result · ${esc(currentExam.title)}</div>
+        <div class="text-base font-bold text-slate-700 mt-0.5">Examinee: ${esc(studentName)}</div>
+        <div class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold border ${gradeColor}">
+          ${gradeLabel}
+        </div>
+      </div>
+      <div class="text-left md:text-right">
+        <div class="text-xs font-semibold text-slate-500 uppercase">Total Score / 総合得点</div>
+        <div class="text-4xl sm:text-5xl font-extrabold text-[#183653] mt-0.5">
+          ${totalScore} <span class="text-xl sm:text-2xl font-bold text-slate-400">/ ${totalMax}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <h4 class="text-sm font-bold text-[#183653] uppercase tracking-wider mb-3">Subsection Breakdown / セクション別得点内訳</h4>
+      <div class="overflow-x-auto border border-slate-200 rounded-xl px-4">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase">
+              <th class="py-2.5 pr-4">Subsection</th>
+              <th class="py-2.5 px-3 text-center">Status</th>
+              <th class="py-2.5 pl-4 text-right">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${breakdownRows}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="mt-6 flex flex-wrap justify-end gap-3">
+      <button onclick="window.print()" class="px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+        Print Results / 結果を印刷
+      </button>
+    </div>
+  `;
+
+  resultsBox.classList.remove('hidden');
+  resultsBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Initialize Home Screen
+renderHome();
+</script>
+</body>
+</html>
